@@ -1,0 +1,12 @@
+footer {
+    background-color: #b9ccdf !important; /* Bootstrap dark theme */
+    color: rgb(0, 0, 0) !important;
+  }
+  
+  footer a {
+    color: #ffc107 !important; /* Bootstrap warning color */
+  }
+  
+  footer a:hover {
+    color: #ffffff !important;
+  }
