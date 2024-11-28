@@ -39,10 +39,11 @@ const EditEmployeePage = () => {
             position: "Software Engineer",
             department: "Development",
           });
-
-        axios.get(`http://localhost:5000/employees/${decryptedId}`)
+      
+        axios.get(`http://localhost:3030/api/employees/${decryptedId}`)
             .then((response) => {
-                setFormData(response.data); // Populate form data with fetched employee data
+                console.log(response);
+                setFormData(response.data.data); // Populate form data with fetched employee data
                 setLoading(false); // Data fetched, stop loading
             })
             .catch((error) => {
@@ -61,7 +62,7 @@ const EditEmployeePage = () => {
         const decryptedId = decryptId(id);
         console.log(decryptedId);
         toast.success("Updated Successfully");
-        axios.put(`http://localhost:5000/employees/${decryptedId}`, formData)
+        axios.put(`http://localhost:3030/api/employees/${decryptedId}`, formData)
             .then(() => {
                 // toast.success("Updated Successfully");
                 navigate('/'); // Redirect to the home page after a successful update

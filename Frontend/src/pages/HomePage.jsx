@@ -6,44 +6,20 @@ import "bootstrap/dist/css/bootstrap.min.css";
 import "bootstrap-icons/font/bootstrap-icons.css";
 import CONSTANTS from "../components/common/constants";
 
-const dummyData = [
-  { id: 1, name: "John Doe", age: 28, position: "Software Engineer", department: "Development" },
-  { id: 2, name: "Jane Smith", age: 34, position: "Product Manager", department: "Product" },
-  { id: 3, name: "Michael Johnson", age: 41, position: "HR Specialist", department: "Human Resources" },
-  { id: 4, name: "Emily Davis", age: 25, position: "UX Designer", department: "Design" },
-  { id: 5, name: "Chris Brown", age: 30, position: "Marketing Specialist", department: "Marketing" },
-  { id: 6, name: "John Doe", age: 28, position: "Software Engineer", department: "Development" },
-  { id: 7, name: "Jane Smith", age: 34, position: "Product Manager", department: "Product" },
-  { id: 8, name: "Michael Johnson", age: 41, position: "HR Specialist", department: "Human Resources" },
-  { id: 9, name: "Emily Davis", age: 25, position: "UX Designer", department: "Design" },
-  { id: 10, name: "Chris Brown", age: 30, position: "Marketing Specialist", department: "Marketing" },
-  { id: 11, name: "John Doe", age: 28, position: "Software Engineer", department: "Development" },
-  { id: 12, name: "Jane Smith", age: 34, position: "Product Manager", department: "Product" },
-  { id: 13, name: "Michael Johnson", age: 41, position: "HR Specialist", department: "Human Resources" },
-  { id: 14, name: "Emily Davis", age: 25, position: "UX Designer", department: "Design" },
-  { id: 15, name: "Chris Brown", age: 30, position: "Marketing Specialist", department: "Marketing" },
-  { id: 16, name: "John Doe", age: 28, position: "Software Engineer", department: "Development" },
-  { id: 17, name: "Jane Smith", age: 34, position: "Product Manager", department: "Product" },
-  { id: 18, name: "Michael Johnson", age: 41, position: "HR Specialist", department: "Human Resources" },
-  { id: 19, name: "Emily Davis", age: 25, position: "UX Designer", department: "Design" },
-  { id: 20, name: "Chris Brown", age: 30, position: "Marketing Specialist", department: "Marketing" },
-  { id: 21, name: "John Doe", age: 28, position: "Software Engineer", department: "Development" },
-  { id: 22, name: "Jane Smith", age: 34, position: "Product Manager", department: "Product" },
-  { id: 23, name: "Michael Johnson", age: 41, position: "HR Specialist", department: "Human Resources" },
-  { id: 24, name: "Emily Davis", age: 25, position: "UX Designer", department: "Design" },
-  { id: 25, name: "Chris Brown", age: 30, position: "Marketing Specialist", department: "Marketing" },
-];
-
-
 const HomePage = () => {
-  const [employees, setEmployees] = useState(dummyData);
+  const [employees, setEmployees] = useState([]);
   const [currentPage, setCurrentPage] = useState(1);
   const employeesPerPage = 4;
+  const [totalCount, setTotalCount] = useState(0); // For pagination based on total count
 
   useEffect(() => {
     axios
-      .get("http://localhost:5000/employees")
-      .then((response) => setEmployees(response.data))
+      .get("http://localhost:3030/api/employees")
+      .then((response) => {
+        const { employees, totalCount } = response.data.data; // Destructuring response
+        setEmployees(employees);
+        setTotalCount(totalCount); // Update totalCount for pagination
+      })
       .catch((error) => console.error("Error fetching employees:", error));
   }, []);
 
@@ -63,7 +39,7 @@ const HomePage = () => {
   const deleteEmployee = (id) => {
     const decryptedId = decryptId(id);
     axios
-      .delete(`http://localhost:5000/employees/${decryptedId}`)
+      .delete(`http://localhost:3030/employees/${decryptedId}`)
       .then(() => setEmployees(employees.filter((emp) => emp.id !== parseInt(decryptedId))))
       .catch((error) => console.error("Error deleting employee:", error));
   };
@@ -73,7 +49,7 @@ const HomePage = () => {
   const indexOfFirstEmployee = indexOfLastEmployee - employeesPerPage;
   const currentEmployees = employees.slice(indexOfFirstEmployee, indexOfLastEmployee);
 
-  const totalPages = Math.ceil(employees.length / employeesPerPage);
+  const totalPages = Math.ceil(totalCount / employeesPerPage); // Use totalCount for pagination
 
   return (
     <div className="container mt-5">
@@ -123,10 +99,7 @@ const HomePage = () => {
             </button>
           </li>
           {Array.from({ length: totalPages }, (_, index) => (
-            <li
-              key={index + 1}
-              className={`page-item ${currentPage === index + 1 ? "active" : ""}`}
-            >
+            <li key={index + 1} className={`page-item ${currentPage === index + 1 ? "active" : ""}`}>
               <button
                 className="page-link"
                 onClick={() => setCurrentPage(index + 1)}

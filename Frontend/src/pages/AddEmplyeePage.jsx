@@ -20,7 +20,7 @@ const AddEmployeePage = () => {
     const handleSubmit = (e) => {
         e.preventDefault();
         toast.success("Employee Added Successfully");
-        axios.post('http://localhost:5000/employees', formData)
+        axios.post('http://localhost:3030/api/employees', formData)
             .then(() => navigate('/'))
             .catch(error => console.error('Error adding employee:', error));
     };
