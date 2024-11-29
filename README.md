@@ -1,9 +1,5 @@
 # Employee Management System
 
-This project includes a frontend (built with Vite and React) and a backend (built with Node.js and Express) to process Secret Santa assignments based on uploaded CSV files. Users can upload an employee list and last year’s Secret Santa results, and the application will generate and allow download of the new Secret Santa assignments for the current year.
-
-<br>
-
 ## Git Clone Instructions
 To get started with the project, follow these steps:
 
