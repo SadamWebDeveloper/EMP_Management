@@ -2,25 +2,14 @@ import { getDBConnection } from "../config/database.js";
 
 const Employee = {
   // Get all employees
-  getAll: async (start = 0, limit = 10) => {
+  getAll: async () => {
     try {
       const db = await getDBConnection();
 
-      // Query to fetch the paginated employees
-      const [rows] = await db.query(
-        "SELECT * FROM employees LIMIT ? OFFSET ?",
-        [limit, start]
-      );
-
-      // Query to get the total count of employees
-      const [totalCountResult] = await db.query(
-        "SELECT COUNT(*) AS total FROM employees"
-      );
-      const totalCount = totalCountResult[0].total;
-
+      const [rows] = await db.query("SELECT * FROM employees ORDER BY id DESC");
       return {
         employees: rows,
-        totalCount: totalCount,
+        totalCount: rows.length,
       };
     } catch (error) {
       console.error(
@@ -34,10 +23,9 @@ const Employee = {
   get: async (id) => {
     try {
       const db = await getDBConnection();
-      const [rows] = await db.query(
-        "SELECT * FROM employees WHERE id = ?",
-        [id]
-      );
+      const [rows] = await db.query("SELECT * FROM employees WHERE id = ?", [
+        id,
+      ]);
       return rows[0] || null; // Return the employee or null if not found
     } catch (error) {
       console.error(`Error fetching employee with ID ${id}: ${error.message}`);
@@ -54,7 +42,7 @@ const Employee = {
         "INSERT INTO employees (name, age, position, department) VALUES (?, ?, ?, ?)",
         [name, age, position, department]
       );
-      return { id: result.insertId, ...employeeData }; // Return the created employee with the new ID
+      return { id: result.insertId, ...employeeData };
     } catch (error) {
       console.error(`Error creating employee: ${error.message}`);
       return false;
@@ -70,7 +58,7 @@ const Employee = {
         "UPDATE employees SET name = ?, age = ?, position = ?, department = ? WHERE id = ?",
         [name, age, position, department, id]
       );
-      return result.affectedRows > 0; // Return true if the update was successful
+      return result.affectedRows > 0;
     } catch (error) {
       console.error(`Error updating employee with ID ${id}: ${error.message}`);
       return false;
@@ -79,12 +67,12 @@ const Employee = {
 
   // Delete an employee by ID
   delete: async (id) => {
+    // console.log(id);
     try {
       const db = await getDBConnection();
-      const [result] = await db.query(
-        "DELETE FROM employees WHERE id = ?",
-        [id]
-      );
+      const [result] = await db.query("DELETE FROM employees WHERE id = ?", [
+        id,
+      ]);
       return result.affectedRows > 0; // Return true if the delete was successful
     } catch (error) {
       console.error(`Error deleting employee with ID ${id}: ${error.message}`);

@@ -9,7 +9,7 @@ const Footer = ({ style }) => {
         textAlign: "center",
         position: "relative",
         width: "100%",
-        ...style, // Allow overriding styles
+        ...style,
       }}
     >
       © {new Date().getFullYear()} Ki Mobility Solutions. All Rights Reserved.

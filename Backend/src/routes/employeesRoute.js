@@ -8,37 +8,45 @@ import {
 
 const handleEmployeeRoute = (req, res) => {
   const url = new URL(req.url, `http://${req.headers.host}`);
-  const id = url.pathname.split("/")[3]
+  const pathSegments = url.pathname.split("/").filter(Boolean); // Split and remove empty segments
+  const basePath = `/${pathSegments[0] || ""}/${pathSegments[1] || ""}`;
+  const id = pathSegments[2];
 
-  if (req.method == "GET" && url.pathname.startsWith("/api/employees") && !id) {
-    getEmployees(req, res);
-    return true;
-  } else if (req.method == "GET" && url.pathname.startsWith("/api/employees") && id) {
-    getEmployee(req, res, id);
-    return true;
-  } else if (
-    req.method == "POST" &&
-    url.pathname.startsWith("/api/employees")
-  ) {
-    addEmployee(req, res);
-    return true;
-  } else if (
-    req.method == "PUT" &&
-    url.pathname.startsWith("/api/employees") &&
-    id
-  ) {
-    updateEmployee(req, res, id);
-    return true;
-  } else if (
-    req.method == "DELETE" &&
-    url.pathname.startsWith("/api/employees") &&
-    id
-  ) {
-    deleteEmployee(req, res, id);
-    return true;
-  } else {
-    return false;
+  // Strict route validation
+  if (basePath === "/api/employees") {
+    switch (req.method) {
+      case "GET":
+        if (id) {
+          getEmployee(req, res, id);
+        } else {
+          getEmployees(req, res);
+        }
+        return true;
+
+      case "POST":
+        addEmployee(req, res);
+        return true;
+
+      case "PUT":
+        if (!id) {
+          return false;
+        }
+        updateEmployee(req, res, id);
+        return true;
+
+      case "DELETE":
+        if (!id) {
+          return false;
+        }
+        deleteEmployee(req, res, id);
+        return true;
+
+      default:
+        return false;
+    }
   }
+
+  return false;
 };
 
 export default handleEmployeeRoute;

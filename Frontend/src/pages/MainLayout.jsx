@@ -7,10 +7,11 @@ import Footer from "../components/common/Footer";
 
 const MainLayout = () => {
   return (
-    <div style={{ display: "flex", minHeight: "100vh", flexDirection: "column" }}>
-
+    <div
+      style={{ display: "flex", minHeight: "100vh", flexDirection: "column" }}
+    >
       <div style={{ display: "flex", flexGrow: 1 }}>
-       {/* Sidebar Content */}     
+        {/* Sidebar Content */}
         <Sidebar />
 
         {/* Main Content */}

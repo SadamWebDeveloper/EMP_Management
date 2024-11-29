@@ -1,7 +1,7 @@
 import employeeRoutes from "./routes/employeesRoute.js";
 
 const app = (req, res) => {
-  // Set CORS headers
+  // Set CORS headers without external lib
   res.setHeader("Access-Control-Allow-Origin", "*"); // Allow requests from any origin (can be restricted)
   res.setHeader("Access-Control-Allow-Methods", "GET, POST, PUT, DELETE");
   res.setHeader("Access-Control-Allow-Headers", "Content-Type");
@@ -13,7 +13,12 @@ const app = (req, res) => {
 
   const routeHandled = employeeRoutes(req, res);
   if (!routeHandled) {
-    res.end(JSON.stringify({ statusCode: 404, message: "Not Found" }));
+    res.end(
+      JSON.stringify({
+        statusCode: 404,
+        message: "API Not Found,Check the API",
+      })
+    );
   }
 };
 

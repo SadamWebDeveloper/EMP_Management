@@ -39,7 +39,15 @@ const Sidebar = () => {
             style={{ padding: "20px 0" }}
             onClick={() => navigate("/")}
           >
-            <i class="bi bi-house-check-fill" style={{marginRight:"10px",fontSize:"25px",color:"#278aa9"}}></i> Employee List {/* Using list icon */}
+            <i
+              class="bi bi-house-check-fill"
+              style={{
+                marginRight: "10px",
+                fontSize: "25px",
+                color: "#278aa9",
+              }}
+            ></i>{" "}
+            Employee List {/* Using list icon */}
           </button>
         </li>
         <li className="nav-item">
@@ -48,7 +56,15 @@ const Sidebar = () => {
             style={{ padding: "10px 0" }}
             onClick={() => navigate("/add-employee")}
           >
-            <i className="bi bi-person-fill-add" style={{marginRight:"10px",fontSize:"25px",color:"#278aa9"}}></i> Add Employee {/* Using add person icon */}
+            <i
+              className="bi bi-person-fill-add"
+              style={{
+                marginRight: "10px",
+                fontSize: "25px",
+                color: "#278aa9",
+              }}
+            ></i>{" "}
+            Add Employee {/* Using add person icon */}
           </button>
         </li>
       </ul>

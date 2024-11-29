@@ -13,6 +13,8 @@ export const getConfig = () => {
   };
 };
 
+// request parsing helper function
+
 export const parseRequest = (req) => {
   return new Promise((resolve, reject) => {
     const url = new URL(`http://${req.headers.host}`);
@@ -35,3 +37,44 @@ export const parseRequest = (req) => {
     });
   });
 };
+
+
+// below wrote function is validation helper function 
+
+export const validateParams = (params, rules) => {
+  const errors = {};
+  const validatedParams = {};
+
+  Object.keys(rules).forEach((key) => {
+    const rule = rules[key];
+    const value = params[key];
+
+    // required field validation
+    if (rule.required && (value === undefined || value === null || value === '')) {
+      errors[key] = `${key} is required.`;
+      return;
+    }
+
+
+    if (!rule.required && (value === undefined || value === null || value === '')) {
+      return;
+    }
+
+
+    if (rule.type && typeof value !== rule.type) {
+      errors[key] = `${key} must be of type ${rule.type}.`;
+      return;
+    }
+
+
+    validatedParams[key] = value;
+  });
+
+  return {
+    isValid: Object.keys(errors).length === 0,
+    errors,
+    validatedParams,
+  };
+};
+
+
